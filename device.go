@@ -19,10 +19,7 @@ type Device struct {
 // Returns a pointer to the newly allocated Device or any error encountered.
 // C equivalent: crypt_init
 func Init(devicePath string) (*Device, error) {
-	if err := crypt.OpenCryptsetup(); err != nil {
-		return nil, err
-	}
-	if err := libc.OpenLibc(); err != nil {
+	if err := ensureIntialized(); err != nil {
 		return nil, err
 	}
 
@@ -41,6 +38,10 @@ func Init(devicePath string) (*Device, error) {
 // Returns a pointer to the newly allocated Device or any error encountered.
 // C equivalent: crypt_init_by_name
 func InitByName(name string) (*Device, error) {
+	if err := ensureIntialized(); err != nil {
+		return nil, err
+	}
+
 	activeCryptDeviceName := strings.CString(name)
 	defer strings.CFree(activeCryptDeviceName)
 
@@ -338,6 +339,8 @@ func (device *Device) Deactivate(deviceName string) error {
 // SetDebugLevel sets the debug level for the library.
 // C equivalent: crypt_set_debug_level
 func SetDebugLevel(debugLevel int) {
+	mustInitialize()
+
 	crypt.SetDebugLevel(int32(debugLevel))
 }
 
@@ -490,4 +493,20 @@ func (device *Device) TokenStatus(token int) (string, TokenInfo) {
 	res := crypt.TokenStatus(device.cryptDevice, uint32(token), &cStr)
 	tokenInfo := TokenInfo(res)
 	return strings.GoString(cStr), tokenInfo
+}
+
+func ensureIntialized() error {
+	if err := crypt.OpenCryptsetup(); err != nil {
+		return err
+	}
+	if err := libc.OpenLibc(); err != nil {
+		return err
+	}
+	return nil
+}
+
+func mustInitialize() {
+	if err := ensureIntialized(); err != nil {
+		panic(err)
+	}
 }
