@@ -2,6 +2,8 @@ package crypt
 
 import (
 	"unsafe"
+
+	"github.com/malt3/purego-cryptsetup/internal/ctypes"
 )
 
 var (
@@ -40,19 +42,19 @@ var (
 type crypt_init func(
 	**CryptDevice, // cd
 	*byte, // device
-) int32
+) ctypes.Int
 
 type crypt_init_by_name func(
 	**CryptDevice, // cd
 	*byte, // name
-) int32
+) ctypes.Int
 
 type crypt_free func(
 	*CryptDevice, // cd
 )
 type crypt_dump func(
 	*CryptDevice, // cd
-) int32
+) ctypes.Int
 
 type crypt_get_type func(
 	*CryptDevice, // cd
@@ -65,9 +67,9 @@ type crypt_format func(
 	*byte, // cipher_mode
 	*byte, // uuid
 	*byte, // volume_key
-	uint64, // volume_key_size
+	ctypes.SizeT, // volume_key_size
 	unsafe.Pointer, // params
-) int32
+) ctypes.Int
 
 type crypt_wipe func(
 	*CryptDevice, // cd
@@ -75,97 +77,97 @@ type crypt_wipe func(
 	uint32, // crypt_wipe_pattern
 	uint64, // offset
 	uint64, // length
-	uint64, // wipe_block_size
+	ctypes.SizeT, // wipe_block_size
 	uint32, // flags
 	unsafe.Pointer, // progress
 	unsafe.Pointer, // usrptr
-) int32
+) ctypes.Int
 
 type crypt_resize func(
 	*CryptDevice, // cd
 	*byte, // name
 	uint64, // new_size
-) int32
+) ctypes.Int
 
 type crypt_load func(
 	*CryptDevice, // cd
 	*byte, // requested_type
 	unsafe.Pointer, // params
-) int32
+) ctypes.Int
 
 type crypt_keyslot_add_by_volume_key func(
 	*CryptDevice, // cd
-	uint32, // keyslot
+	ctypes.Int, // keyslot
 	*byte, // volume_key
-	uint64, // volume_key_size
+	ctypes.SizeT, // volume_key_size
 	*byte, // passphrase
-	uint64, // passphrase_size
-) int32
+	ctypes.SizeT, // passphrase_size
+) ctypes.Int
 
 type crypt_keyslot_add_by_passphrase func(
 	*CryptDevice, // cd
-	uint32, // keyslot
+	ctypes.Int, // keyslot
 	*byte, // passphrase
-	uint64, // passphrase_size
+	ctypes.SizeT, // passphrase_size
 	*byte, // new_passphrase
-	uint64, // new_passphrase_size
-) int32
+	ctypes.SizeT, // new_passphrase_size
+) ctypes.Int
 
 type crypt_keyslot_change_by_passphrase func(
 	*CryptDevice, // cd
-	uint32, // keyslot_old
-	uint32, // keyslot_new
+	ctypes.Int, // keyslot_old
+	ctypes.Int, // keyslot_new
 	*byte, // passphrase
-	uint64, // passphrase_size
+	ctypes.SizeT, // passphrase_size
 	*byte, // new_passphrase
-	uint64, // new_passphrase_size
-) int32
+	ctypes.SizeT, // new_passphrase_size
+) ctypes.Int
 
 type crypt_activate_by_passphrase func(
 	*CryptDevice, // cd
 	*byte, // name
-	uint32, // keyslot
+	ctypes.Int, // keyslot
 	*byte, // passphrase
-	uint64, // passphrase_size
+	ctypes.SizeT, // passphrase_size
 	uint32, // flags
-) int32
+) ctypes.Int
 
 type crypt_activate_by_token func(
 	*CryptDevice, // cd
 	*byte, // name
-	uint32, // token
+	ctypes.Int, // token
 	unsafe.Pointer, // usrptr
 	uint32, // flags
-) int32
+) ctypes.Int
 
 type crypt_activate_by_volume_key func(
 	*CryptDevice, // cd
 	*byte, // name
 	*byte, // volume_key
-	uint64, // volume_key_size
+	ctypes.SizeT, // volume_key_size
 	uint32, // flags
-) int32
+) ctypes.Int
 
 type crypt_deactivate func(
 	*CryptDevice, // cd
 	*byte, // name
-) int32
+) ctypes.Int
 
 type crypt_set_debug_level func(
-	int32, // level
+	ctypes.Int, // level
 )
 type crypt_get_volume_key_size func(
 	*CryptDevice, // cd
-) int32
+) ctypes.Int
 
 type crypt_volume_key_get func(
 	*CryptDevice, // cd
-	int32, // keyslot
+	ctypes.Int, // keyslot
 	*byte, // volume_key
-	*uint64, // volume_key_size
+	*ctypes.SizeT, // volume_key_size
 	*byte, // passphrase
-	uint64, // passphrase_size
-) int32
+	ctypes.SizeT, // passphrase_size
+) ctypes.Int
 
 type crypt_get_device_name func(
 	*CryptDevice, // cd
@@ -177,51 +179,51 @@ type crypt_get_uuid func(
 
 type crypt_token_json_get func(
 	*CryptDevice, // cd
-	uint32, // token
+	ctypes.Int, // token
 	**byte, // json
-) int32
+) ctypes.Int
 
 type crypt_token_json_set func(
 	*CryptDevice, // cd
-	uint32, // token
+	ctypes.Int, // token
 	*byte, // json
-) int32
+) ctypes.Int
 
 type crypt_token_luks2_keyring_get func(
 	*CryptDevice, // cd
-	uint32, // token
+	ctypes.Int, // token
 	*TokenParamsLUKS2Keyring, // params
-) int32
+) ctypes.Int
 
 type crypt_token_luks2_keyring_set func(
 	*CryptDevice, // cd
-	uint32, // token
+	ctypes.Int, // token
 	*TokenParamsLUKS2Keyring, // params
-) int32
+) ctypes.Int
 
 type crypt_token_assign_keyslot func(
 	*CryptDevice, // cd
-	uint32, // token
-	uint32, // keyslot
-) int32
+	ctypes.Int, // token
+	ctypes.Int, // keyslot
+) ctypes.Int
 
 type crypt_token_unassign_keyslot func(
 	*CryptDevice, // cd
-	uint32, // token
-	uint32, // keyslot
-) int32
+	ctypes.Int, // token
+	ctypes.Int, // keyslot
+) ctypes.Int
 
 type crypt_token_is_assigned func(
 	*CryptDevice, // cd
-	uint32, // token
-	uint32, // keyslot
-) int32
+	ctypes.Int, // token
+	ctypes.Int, // keyslot
+) ctypes.Int
 
 type crypt_token_status func(
 	*CryptDevice, // cd
-	uint32, // token
+	ctypes.Int, // token
 	**byte, // type
-) int32
+) ctypes.Int
 
 type crypt_set_log_callback func(
 	*CryptDevice, // cd
@@ -251,9 +253,8 @@ type TokenParamsLUKS2Keyring struct {
 const SizeofTokenParamsLUKS2Keyring = unsafe.Sizeof(TokenParamsLUKS2Keyring{})
 
 type ParamsLUKS1 struct {
-	Hash *byte
-	// TODO: use portable type (size_t)
-	DataAlignment uint64
+	Hash          *byte
+	DataAlignment ctypes.SizeT
 	DataDevice    *byte
 }
 
@@ -261,12 +262,11 @@ type ParamsLUKS2 struct {
 	PBKDF           *PBKDFType
 	Integrity       *byte
 	IntegrityParams *ParamsIntegrity
-	// TODO: use portable type (size_t)
-	DataAlignment uint64
-	DataDevice    *byte
-	SectorSize    uint32
-	Label         *byte
-	Subsystem     *byte
+	DataAlignment   ctypes.SizeT
+	DataDevice      *byte
+	SectorSize      uint32
+	Label           *byte
+	Subsystem       *byte
 }
 
 type PBKDFType struct {
@@ -283,11 +283,9 @@ type PBKDFType struct {
 const SizeofPBKDFType = unsafe.Sizeof(PBKDFType{})
 
 type ParamsIntegrity struct {
-	JournalSize uint64
-	// TODO: use portable type (uint)
-	JournalWatermark uint32
-	// TODO: use portable type (uint)
-	JournalCommitTime       uint32
+	JournalSize             uint64
+	JournalWatermark        ctypes.Uint
+	JournalCommitTime       ctypes.Uint
 	InterleaveSectors       uint32
 	TagSize                 uint32
 	SectorSize              uint32

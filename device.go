@@ -113,17 +113,6 @@ func (device *Device) Format(deviceType DeviceType, genericParams GenericParams)
 	return nil
 }
 
-// TODO: export progress_callback
-
-var progressCallback func(size, offset uint64) int
-
-func progress_callback(size, offset uint64, usrptr unsafe.Pointer) int {
-	if progressCallback != nil {
-		return progressCallback(uint64(size), uint64(offset))
-	}
-	return 0
-}
-
 // Wipe wipes/fills (part of) a device with the selected pattern.
 // Returns nil on success, or an error otherwise.
 // C equivalent: crypt_wipe
